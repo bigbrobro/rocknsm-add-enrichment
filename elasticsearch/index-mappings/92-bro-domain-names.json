@@ -1,0 +1,181 @@
+{
+  "order": 92,
+  "index_patterns": [ "bro-*" ],
+  "version": 2018122201,
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "domain_analyzer": {
+          "filter": "lowercase",
+          "type": "custom",
+          "tokenizer": "domain_tokenizer"
+        },
+        "dot_analyzer": {
+          "filter": [ "lowercase", "unique" ],
+          "type": "custom",
+          "tokenizer": "dot_tokenizer"
+        }
+      },
+      "tokenizer": {
+        "dot_tokenizer": {
+          "type": "pattern",
+          "pattern": "\\.",
+          "reverse": false,
+          "skip": 0
+        },
+        "domain_tokenizer": {
+          "type": "path_hierarchy",
+          "delimiter": ".",
+          "reverse": true,
+          "skip": 0
+        }
+      }
+    }
+  },
+  "mappings": {
+    "_doc": {
+      "dynamic_templates": [
+        {
+          "domain_level_length": {
+            "path_match": "domain.lev_*.length",
+            "mapping": {
+              "type": "short"
+            }
+          }
+        },
+        {
+          "domain_level_name": {
+            "path_match": "domain.lev_*.name",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+        },
+        {
+          "domain_level_vowels": {
+            "path_match": "domain.lev_*.vowels",
+            "mapping": {
+              "type": "short"
+            }
+          }
+        },
+        {
+          "domain_level_letters": {
+            "path_match": "domain.lev_*.letters",
+            "mapping": {
+              "type": "short"
+            }
+          }
+        },
+        {
+          "domain_level_consonants": {
+            "path_match": "domain.lev_*.consonants",
+            "mapping": {
+              "type": "short"
+            }
+          }
+        },
+        {
+          "domain_level_punctuation": {
+            "path_match": "domain.lev_*.punctuation",
+            "mapping": {
+              "type": "short"
+            }
+          }
+        },
+        {
+          "domain_level_digits": {
+            "path_match": "domain.lev_*.digits",
+            "mapping": {
+              "type": "short"
+            }
+          }
+        },
+        {
+          "domain_level_hex": {
+            "path_match": "domain.lev_*.hex",
+            "mapping": {
+              "type": "short"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "domain": {
+          "dynamic": true,
+          "properties": {
+            "ends_with_int": {
+              "type": "boolean",
+              "doc_values": false
+            },
+            "has_dot": {
+              "type": "boolean",
+              "doc_values": false
+            },
+            "has_non_ascii": {
+              "type": "boolean",
+              "doc_values": false
+            },
+            "has_space": {
+              "type": "boolean",
+              "doc_values": false
+            },
+            "is_idn": {
+              "type": "boolean",
+              "doc_values": false
+            },
+            "total": {
+              "properties": {
+                "consonants": {
+                  "type": "short"
+                },
+                "digits": {
+                  "type": "short"
+                },
+                "hex": {
+                  "type": "short"
+                },
+                "length": {
+                  "type": "short"
+                },
+                "letters": {
+                  "type": "short"
+                },
+                "levels": {
+                  "type": "short"
+                },
+                "punctuation": {
+                  "type": "short"
+                },
+                "vowels": {
+                  "type": "short"
+                }
+              }
+            }
+          }
+        },
+        "domain_hostname": {
+          "type": "text",
+          "norms": false,
+          "analyzer": "dot_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "eager_global_ordinals": true
+            }
+          }
+        },
+        "domain_1n2_name": {
+          "type": "keyword",
+          "eager_global_ordinals": true
+        },
+        "domain_1n2n3_name": {
+          "type": "keyword"
+        },
+        "domain_type": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
